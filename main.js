@@ -1,4 +1,4 @@
-const maxTweets = 20
+const maxTweets = 200
 
 let firstUser, secondUser
 let urls, headers
@@ -22,6 +22,13 @@ function submit() {
   setTimeout(function () {
     updateScore()
   }, 1000);
+
+  let formDiv = document.getElementById("form")
+  formDiv.style.display = "none"
+
+  let choiceButtons = document.getElementById("choices")
+  choiceButtons.style.display = "block"
+
 }
 
 let jsonData, tweetDiv

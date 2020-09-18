@@ -8,28 +8,32 @@
     <h1>Change++ Coding Challenge</h1>
     <h2>Eli Lapkin</h2>
 
-    <p>To begin, enter the Twitter handles of two users.</p>
-    <input type="text" name="firstUser" id="first-user" placeholder="First User">
-    <input type="text" name="secondUser" id="second-user" placeholder="Second User">
+    <div id="form">
+      <p>To begin, enter the Twitter handles of two users.</p>
+      <input type="text" name="firstUser" id="first-user" placeholder="First User">
+      <input type="text" name="secondUser" id="second-user" placeholder="Second User">
 
-    <input type="button" name="submit" value="Submit" onclick="submit()">
+      <input type="button" name="submit" value="Submit" onclick="submit()">
+    </div>
 
     <br>
 
     <div id="tweet"></div>
 
-    <button type="button" name="elon" onclick="onClick(&#34;elonmusk&#34;)">
-      Elon
-    </button>
+    <div id="choices" style="display: none">
+      <button type="button" name="elon" onclick="onClick(&#34;elonmusk&#34;)">
+        Elon
+      </button>
 
-    <button type="button" name="kanye" onclick="onClick(&#34;kanyewest&#34;)">
-      Kanye
-    </button>
+      <button type="button" name="kanye" onclick="onClick(&#34;kanyewest&#34;)">
+        Kanye
+      </button>
 
-    <p id="score">Score:
-      <span id="num-correct"></span> / <span id="num-total"></span>
-      Correct
-    </p>
+      <p id="score">Score:
+        <span id="num-correct"></span> / <span id="num-total"></span>
+        Correct
+      </p>
+    </div>
 
     <script src="main.js" charset="utf-8"></script>
   </body>
