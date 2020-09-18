@@ -1,28 +1,45 @@
 const maxTweets = 20
 
-let prefix = 'https://cors-anywhere.herokuapp.com/'
-let urls = [
-  prefix + 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=elonmusk&count=' + maxTweets,
-  prefix + 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=kanyewest&count=' + maxTweets
-]
+let firstUser, secondUser
+let urls, headers
 
-const headers = new Headers()
+function submit() {
+  firstUser = document.getElementById('first-user').value
+  secondUser = document.getElementById('second-user').value
 
-headers.append('Content-Type', 'application/json')
-headers.append('Authorization', 'Bearer AAAAAAAAAAAAAAAAAAAAALz0HgEAAAAAU0%2FBec0tmly9q6TcUPQwzbnUutE%3DPNYKcbuLJCBz43SQJ25yFsP11znICMnkSmQ9Ubj5II5W1Urry8')
+  let prefix = 'https://cors-anywhere.herokuapp.com/'
+  urls = [
+    prefix + 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' + firstUser + '&count=' + maxTweets,
+    prefix + 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' + secondUser + '&count=' + maxTweets
+  ]
 
-let requests = urls.map(url => fetch(url, {
-  method: 'GET',
-  headers: headers
-}))
+  headers = new Headers()
 
-var tweetDiv = document.getElementById('tweet')
+  headers.append('Content-Type', 'application/json')
+  headers.append('Authorization', 'Bearer AAAAAAAAAAAAAAAAAAAAALz0HgEAAAAAU0%2FBec0tmly9q6TcUPQwzbnUutE%3DPNYKcbuLJCBz43SQJ25yFsP11znICMnkSmQ9Ubj5II5W1Urry8')
 
-let jsonData = [];
-Promise.all(requests).then(responses => responses.forEach(
-  response => response.json()
-                      .then(responseData => jsonData.push(responseData))
-))
+  getData()
+  setTimeout(function () {
+    updateScore()
+  }, 1000);
+}
+
+let jsonData, tweetDiv
+
+function getData() {
+  let requests = urls.map(url => fetch(url, {
+    method: 'GET',
+    headers: headers
+  }))
+
+  tweetDiv = document.getElementById('tweet')
+
+  jsonData = [];
+  Promise.all(requests).then(responses => responses.forEach(
+    response => response.json()
+                        .then(responseData => jsonData.push(responseData))
+  ))
+}
 
 let user
 let pastTweets = []
@@ -51,25 +68,32 @@ function displayTweet() {
   console.log(pastTweets)
 }
 
-displayTweet()
-
 let numCorrect = 0
 let numTotal = 0
+let count = 0
 
-var numerator = document.getElementById('num-correct')
-var denominator = document.getElementById('num-total')
+let numerator, denominator
+let numeratorValue, denominatorValue
+let newNumerator, newDenominator
 
-var numeratorValue = document.createElement('span')
-numeratorValue.textContent = 0
-numerator.appendChild(numeratorValue)
+function updateScore() {
+  displayTweet()
 
-var denominatorValue = document.createElement('span')
-denominatorValue.textContent = 0
-denominator.appendChild(denominatorValue)
+  numerator = document.getElementById('num-correct')
+  denominator = document.getElementById('num-total')
 
-var count = 0
-var newNumerator = document.createElement('span')
-var newDenominator = document.createElement('span')
+  numeratorValue = document.createElement('span')
+  numeratorValue.textContent = 0
+  numerator.appendChild(numeratorValue)
+
+  denominatorValue = document.createElement('span')
+  denominatorValue.textContent = 0
+  denominator.appendChild(denominatorValue)
+
+
+  newNumerator = document.createElement('span')
+  newDenominator = document.createElement('span')
+}
 
 function onClick(clickedUser) {
   if (clickedUser == user) {
