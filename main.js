@@ -16,7 +16,7 @@ let requests = urls.map(url => fetch(url, {
   headers: headers
 }))
 
-var app = document.getElementById('tweet')
+var tweetDiv = document.getElementById('tweet')
 
 let jsonData = [];
 Promise.all(requests).then(responses => responses.forEach(
@@ -24,22 +24,78 @@ Promise.all(requests).then(responses => responses.forEach(
                       .then(responseData => jsonData.push(responseData))
 ))
 
-// get random numbers to choose user and tweet index
-let randomUser = Math.floor(Math.random() * 2)
-let randomTweet = Math.floor(Math.random() * maxTweets)
+let user
 
-setTimeout(function () {
-  let tweet = jsonData[randomUser][randomTweet].text
-  let user = jsonData[randomUser][randomTweet].user.screen_name
-  let count = 0
-  while ((tweet.includes("https://t.co/") || tweet.includes("@")) && count < maxTweets) {
-    randomTweet = Math.floor(Math.random() * maxTweets)
-    tweet = jsonData[randomUser][randomTweet].text
+function displayTweet() {
+  // get random numbers to choose user and tweet index
+  let randomUser = Math.floor(Math.random() * 2)
+  let randomTweet = Math.floor(Math.random() * maxTweets)
+
+  setTimeout(function () {
+    let tweet = jsonData[randomUser][randomTweet].text
     user = jsonData[randomUser][randomTweet].user.screen_name
-    count++;
+    let count = 0
+    while ((tweet.includes("https://t.co/") || tweet.includes("@")) && count < maxTweets) {
+      randomTweet = Math.floor(Math.random() * maxTweets)
+      tweet = jsonData[randomUser][randomTweet].text
+      user = jsonData[randomUser][randomTweet].user.screen_name
+      count++;
+    }
+    let tweetElement = document.createElement('h4')
+    tweetElement.setAttribute('id', 'tweet-text')
+    tweetElement.textContent = tweet
+    tweetDiv.appendChild(tweetElement)
+  }, 2000);
+}
+
+displayTweet()
+
+let numCorrect = 0
+let numTotal = 0
+
+var numerator = document.getElementById('num-correct')
+var denominator = document.getElementById('num-total')
+
+var numeratorValue = document.createElement('span')
+numeratorValue.textContent = 0
+numerator.appendChild(numeratorValue)
+
+var denominatorValue = document.createElement('span')
+denominatorValue.textContent = 0
+denominator.appendChild(denominatorValue)
+
+var count = 0
+var newNumerator = document.createElement('span')
+var newDenominator = document.createElement('span')
+
+function onClick(clickedUser) {
+  if (clickedUser == user) {
+    numCorrect++
+    if (count % 2 == 0) {
+      newNumerator.textContent = numCorrect
+      numerator.parentNode.replaceChild(newNumerator, numerator)
+    } else {
+      numerator.textContent = numCorrect
+      newNumerator.parentNode.replaceChild(numerator, newNumerator)
+    }
+
+  } else {
+    console.log("incorrect")
   }
-  let tweetElement = document.createElement('h4')
-  tweetElement.textContent = tweet
-  app.appendChild(tweetElement)
-  console.log(user)
-}, 2000);
+
+  document.getElementById('tweet-text').remove()
+
+  // increment total guesses (denominator)
+  numTotal++
+  if (count % 2 == 0) {
+    newDenominator.textContent = numTotal
+    denominator.parentNode.replaceChild(newDenominator, denominator)
+  } else {
+    denominator.textContent = numTotal
+    newDenominator.parentNode.replaceChild(denominator, newDenominator)
+  }
+
+  count++
+
+  displayTweet()
+}
