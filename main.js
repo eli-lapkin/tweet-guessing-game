@@ -25,6 +25,7 @@ Promise.all(requests).then(responses => responses.forEach(
 ))
 
 let user
+let pastTweets = []
 
 function displayTweet() {
   // get random numbers to choose user and tweet index
@@ -35,7 +36,7 @@ function displayTweet() {
     let tweet = jsonData[randomUser][randomTweet].text
     user = jsonData[randomUser][randomTweet].user.screen_name
     let count = 0
-    while ((tweet.includes("https://t.co/") || tweet.includes("@")) && count < maxTweets) {
+    while ((tweet.includes("https://t.co/") || tweet.includes("@") || pastTweets.includes(tweet)) && count < maxTweets) {
       randomTweet = Math.floor(Math.random() * maxTweets)
       tweet = jsonData[randomUser][randomTweet].text
       user = jsonData[randomUser][randomTweet].user.screen_name
@@ -46,6 +47,8 @@ function displayTweet() {
     tweetElement.textContent = tweet
     tweetDiv.appendChild(tweetElement)
   }, 2000);
+
+  console.log(pastTweets)
 }
 
 displayTweet()
@@ -79,10 +82,10 @@ function onClick(clickedUser) {
       newNumerator.parentNode.replaceChild(numerator, newNumerator)
     }
 
-  } else {
-    console.log("incorrect")
   }
 
+  let oldTweet = document.getElementById('tweet-text').textContent
+  pastTweets.push(oldTweet)
   document.getElementById('tweet-text').remove()
 
   // increment total guesses (denominator)
