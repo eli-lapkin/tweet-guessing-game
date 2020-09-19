@@ -1,6 +1,5 @@
 const maxTweets = 200
 
-let firstUser, secondUser
 let urls, headers
 
 function submit() {
@@ -28,6 +27,12 @@ function submit() {
 
   let choiceButtons = document.getElementById("choices")
   choiceButtons.style.display = "block"
+
+  let firstChoice = document.getElementById('first-choice')
+  let secondChoice = document.getElementById('second-choice')
+
+  firstChoice.textContent = "@" + firstUser
+  secondChoice.textContent = "@" + secondUser
 
 }
 
@@ -71,8 +76,6 @@ function displayTweet() {
     tweetElement.textContent = tweet
     tweetDiv.appendChild(tweetElement)
   }, 2000);
-
-  console.log(pastTweets)
 }
 
 let numCorrect = 0
@@ -103,7 +106,7 @@ function updateScore() {
 }
 
 function onClick(clickedUser) {
-  if (clickedUser == user) {
+  if (clickedUser.toLowerCase() == "@" + user.toLowerCase()) {
     numCorrect++
     if (count % 2 == 0) {
       newNumerator.textContent = numCorrect

@@ -9,24 +9,20 @@
     <h2>Eli Lapkin</h2>
 
     <div id="form">
-      <p>To begin, enter the Twitter handles of two users.</p>
+      <p>To begin, enter the Twitter handles of two users. Please do not type an @ at the beginning of the name.</p>
       <input type="text" name="firstUser" id="first-user" placeholder="First User">
       <input type="text" name="secondUser" id="second-user" placeholder="Second User">
 
       <input type="button" name="submit" value="Submit" onclick="submit()">
     </div>
 
-    <br>
-
     <div id="tweet"></div>
 
     <div id="choices" style="display: none">
-      <button type="button" name="elon" onclick="onClick(&#34;elonmusk&#34;)">
-        Elon
+      <button type="button" name="firstChoice" id="first-choice" onclick="onClick(document.getElementById('first-choice').textContent)">
       </button>
 
-      <button type="button" name="kanye" onclick="onClick(&#34;kanyewest&#34;)">
-        Kanye
+      <button type="button" name="secondChoice" id="second-choice" onclick="onClick(document.getElementById('second-choice').textContent)">
       </button>
 
       <p id="score">Score:
