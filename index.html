@@ -25,7 +25,10 @@
       <input type="button" name="submit" value="Submit" onclick="submit()">
 
       <br><br>
-      <i class="fas fa-question-circle"></i> Need an example? Try <i>elonmusk</i> and <i>kanywest</i>.
+      <i class="fas fa-question-circle"></i>
+      Need an example?
+      Try <i class="sample" onclick="fillInput('elonmusk')">elonmusk</i> and
+          <i class="sample" onclick="fillInput('kanyewest')">kanyewest</i>.
     </div>
 
     <div id="tweet"></div>
@@ -38,8 +41,8 @@
       </button>
 
       <p id="score">Score:
-        <span id="num-correct"></span> / <span id="num-total"></span>
-        Correct
+        <span id="num-correct"></span> / <span id="num-total"></span> Correct
+        <span id="streak"></span>
       </p>
     </div>
 

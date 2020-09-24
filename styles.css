@@ -14,3 +14,12 @@ body {
 .subtitle {
   font-size: .75em;
 }
+
+.sample {
+  text-decoration: underline;
+  color: blue;
+}
+
+#streak {
+  padding-left: 3em;
+}

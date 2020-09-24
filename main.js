@@ -81,6 +81,7 @@ function displayTweet() {
 let numCorrect = 0
 let numTotal = 0
 let count = 0
+let streak = 0
 
 let numerator, denominator
 let numeratorValue, denominatorValue
@@ -100,15 +101,34 @@ function updateScore() {
   denominatorValue.textContent = 0
   denominator.appendChild(denominatorValue)
 
-
   newNumerator = document.createElement('span')
   newDenominator = document.createElement('span')
 }
 
+let streakContainer = document.getElementById('streak')
+let streakValue = document.createElement('span')
+
+streakContainer.appendChild(streakValue)
+streakContainer.style.visibility = "hidden"
+
 function onClick(clickedUser) {
   if (clickedUser.toLowerCase() == "@" + user.toLowerCase()) {
     numCorrect++
+    streak++
+    if (streak >= 3) {
+      streakContainer.style.visibility = "visible"
+    }
+  } else {
+    streak = 0
   }
+
+  streakValue.innerHTML = "&#128293;" + streak
+
+  if (streak == 0) {
+    streakContainer.style.visibility = "hidden"
+  }
+
+  streakContainer.appendChild(streakValue)
 
   if (count % 2 == 0) {
     newNumerator.textContent = numCorrect
@@ -135,4 +155,17 @@ function onClick(clickedUser) {
   count++
 
   displayTweet()
+}
+
+function fillInput(name) {
+  firstUser = document.getElementById('first-user')
+  secondUser = document.getElementById('second-user')
+
+  if (firstUser.value == "") {
+    firstUser.value = name
+  } else if (firstUser.value == name) {
+    secondUser.value = secondUser.value;
+  } else if (secondUser.value == "") {
+    secondUser.value = name
+  }
 }
