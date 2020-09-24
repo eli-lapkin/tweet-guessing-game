@@ -1,0 +1,15 @@
+h1, h2 {
+  font-family: 'Inria Serif', serif;
+}
+
+body {
+  font-family: 'Roboto', sans-serif;
+  padding-left: 25%;
+  padding-right: 25%;
+  padding-top: 5%;
+  background-color: #f1f3f4;
+}
+
+#name {
+  font-size: .75em;
+}
