@@ -1,4 +1,5 @@
-const maxTweets = 200
+const MAX_TWEETS = 200
+const MAX_PAGES = 3
 
 let urls, headers
 
@@ -7,9 +8,11 @@ function submit() {
   secondUser = document.getElementById('second-user').value
 
   let prefix = 'https://cors-anywhere.herokuapp.com/'
+  let call = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name='
+  let randomPage = Math.floor(Math.random() * 3)
   urls = [
-    prefix + 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' + firstUser + '&count=' + maxTweets,
-    prefix + 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name=' + secondUser + '&count=' + maxTweets
+    prefix + call + firstUser + '&count=' + MAX_TWEETS + "&page=" + toString(randomPage),
+    prefix + call + secondUser + '&count=' + MAX_TWEETS + "&page=" + toString(randomPage)
   ]
 
   headers = new Headers()
@@ -59,14 +62,14 @@ let pastTweets = []
 function displayTweet() {
   // get random numbers to choose user and tweet index
   let randomUser = Math.floor(Math.random() * 2)
-  let randomTweet = Math.floor(Math.random() * maxTweets)
+  let randomTweet = Math.floor(Math.random() * MAX_TWEETS)
 
   setTimeout(function () {
     let tweet = jsonData[randomUser][randomTweet].text
     user = jsonData[randomUser][randomTweet].user.screen_name
     let count = 0
-    while ((tweet.includes("https://t.co/") || tweet.includes("@") || pastTweets.includes(tweet)) && count < maxTweets) {
-      randomTweet = Math.floor(Math.random() * maxTweets)
+    while ((tweet.includes("https://t.co/") || tweet.includes("@") || pastTweets.includes(tweet)) && count < MAX_TWEETS) {
+      randomTweet = Math.floor(Math.random() * MAX_TWEETS)
       tweet = jsonData[randomUser][randomTweet].text
       user = jsonData[randomUser][randomTweet].user.screen_name
       count++;
@@ -108,24 +111,42 @@ function updateScore() {
 let streakContainer = document.getElementById('streak')
 let streakValue = document.createElement('span')
 
+let pastStreaksContainer = document.getElementById('high-score')
+let pastStreaksValue = document.createElement('span')
+
 streakContainer.appendChild(streakValue)
 streakContainer.style.visibility = "hidden"
+
+pastStreaksContainer.appendChild(pastStreaksValue)
+pastStreaksContainer.style.visibility = "hidden"
+
+let pastStreaks = 0
+let record = 0
 
 function onClick(clickedUser) {
   if (clickedUser.toLowerCase() == "@" + user.toLowerCase()) {
     numCorrect++
     streak++
+    if (streak > record) {
+      record = streak;
+    }
     if (streak >= 3) {
       streakContainer.style.visibility = "visible"
+      if (pastStreaks > 0) {
+        pastStreaksContainer.style.visibility = "visible"
+      }
+      pastStreaks++
     }
   } else {
     streak = 0
   }
 
   streakValue.innerHTML = "&#128293;" + streak
+  pastStreaksValue.innerHTML = "Best Streak: " + record
 
   if (streak == 0) {
     streakContainer.style.visibility = "hidden"
+    pastStreaksContainer.style.visibility = "hidden"
   }
 
   streakContainer.appendChild(streakValue)
