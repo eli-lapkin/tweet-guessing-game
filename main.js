@@ -108,14 +108,14 @@ function updateScore() {
 function onClick(clickedUser) {
   if (clickedUser.toLowerCase() == "@" + user.toLowerCase()) {
     numCorrect++
-    if (count % 2 == 0) {
-      newNumerator.textContent = numCorrect
-      numerator.parentNode.replaceChild(newNumerator, numerator)
-    } else {
-      numerator.textContent = numCorrect
-      newNumerator.parentNode.replaceChild(numerator, newNumerator)
-    }
+  }
 
+  if (count % 2 == 0) {
+    newNumerator.textContent = numCorrect
+    numerator.parentNode.replaceChild(newNumerator, numerator)
+  } else {
+    numerator.textContent = numCorrect
+    newNumerator.parentNode.replaceChild(numerator, newNumerator)
   }
 
   let oldTweet = document.getElementById('tweet-text').textContent
