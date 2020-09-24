@@ -7,9 +7,10 @@ body {
   padding-left: 25%;
   padding-right: 25%;
   padding-top: 5%;
-  background-color: #f1f3f4;
+  background-color: #F5F8FA;
+  color: #14242C;
 }
 
-#name {
+.subtitle {
   font-size: .75em;
 }
