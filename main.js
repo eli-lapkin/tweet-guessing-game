@@ -7,15 +7,13 @@ function submit() {
   firstUser = document.getElementById('first-user').value
   secondUser = document.getElementById('second-user').value
 
-  let prefix = 'https://cors-anywhere.herokuapp.com/'
-  let call = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name='
-  let randomPage = Math.floor(Math.random() * 7)
-  urls = [
-    prefix + call + firstUser + '&count=' + MAX_TWEETS + "&page=" + toString(randomPage),
-    prefix + call + secondUser + '&count=' + MAX_TWEETS + "&page=" + toString(randomPage)
-  ]
-
-  headers = new Headers()
+  // validate input users to remove @ if there is one
+  if (firstUser[0] == "@") {
+    firstUser = firstUser.substring(1, firstUser.length)
+  }
+  if (secondUser[0] == "@") {
+    secondUser = secondUser.substring(1, secondUser.length)
+  }
 
   headers.append('Content-Type', 'application/json')
   headers.append('Authorization', 'Bearer AAAAAAAAAAAAAAAAAAAAALz0HgEAAAAAU0%2FBec0tmly9q6TcUPQwzbnUutE%3DPNYKcbuLJCBz43SQJ25yFsP11znICMnkSmQ9Ubj5II5W1Urry8')
@@ -36,20 +34,35 @@ function submit() {
 
   firstChoice.textContent = "@" + firstUser
   secondChoice.textContent = "@" + secondUser
-
 }
 
-let jsonData, tweetDiv
+let jsonData = []
+let tweetDiv = document.getElementById('tweet')
 
 function getData() {
+  let prefix = 'https://cors-anywhere.herokuapp.com/' // used to avoid CORS error
+  let call = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name='
+
+  let randomPage = Math.floor(Math.random() * 7) // select random page (0-MAX_PAGES)
+
+  // array of URLs for GET request (one for each user)
+  urls = [
+    prefix + call + firstUser + '&count=' + MAX_TWEETS + "&page=" + toString(randomPage),
+    prefix + call + secondUser + '&count=' + MAX_TWEETS + "&page=" + toString(randomPage)
+  ]
+
+  // create and append headers
+  headers = new Headers()
+  headers.append('Content-Type', 'application/json')
+  headers.append('Authorization', 'Bearer AAAAAAAAAAAAAAAAAAAAALz0HgEAAAAAU0%2FBec0tmly9q6TcUPQwzbnUutE%3DPNYKcbuLJCBz43SQJ25yFsP11znICMnkSmQ9Ubj5II5W1Urry8')
+
+  // GET request for each URL
   let requests = urls.map(url => fetch(url, {
     method: 'GET',
     headers: headers
   }))
 
-  tweetDiv = document.getElementById('tweet')
-
-  jsonData = [];
+  // push data when promise is fulfilled
   Promise.all(requests).then(responses => responses.forEach(
     response => response.json()
                         .then(responseData => jsonData.push(responseData))
