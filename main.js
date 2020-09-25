@@ -1,9 +1,11 @@
 const MAX_TWEETS = 200
-const MAX_PAGES = 3
+const MAX_PAGES = 7
 
 let urls, headers
 
+// function to call when the player clicks Submit
 function submit() {
+  // get value of text input fields
   firstUser = document.getElementById('first-user').value
   secondUser = document.getElementById('second-user').value
 
@@ -15,14 +17,19 @@ function submit() {
     secondUser = secondUser.substring(1, secondUser.length)
   }
 
-  headers.append('Content-Type', 'application/json')
-  headers.append('Authorization', 'Bearer AAAAAAAAAAAAAAAAAAAAALz0HgEAAAAAU0%2FBec0tmly9q6TcUPQwzbnUutE%3DPNYKcbuLJCBz43SQJ25yFsP11znICMnkSmQ9Ubj5II5W1Urry8')
+  getData() // GET requests to get tweet data
 
-  getData()
+  // wait 1000 milliseconds before attempting to display tweet and update score
   setTimeout(function () {
+    displayTweet()
     updateScore()
   }, 1000);
 
+  makeUserButtons()
+}
+
+// function to display two buttons, one for each desired Twitter user
+function makeUserButtons() {
   let formDiv = document.getElementById("form")
   formDiv.style.display = "none"
 
@@ -78,9 +85,13 @@ function displayTweet() {
   let randomTweet = Math.floor(Math.random() * MAX_TWEETS)
 
   setTimeout(function () {
+    // randomly select a Tweet and determine the user of that Tweet
     let tweet = jsonData[randomUser][randomTweet].text
     user = jsonData[randomUser][randomTweet].user.screen_name
-    let count = 0
+
+    let count = 0 // used to ensure the following while loop does not run forever
+
+    // if Tweet includes a link or @, or has already been displayed, find a new Tweet
     while ((tweet.includes("https://t.co/") || tweet.includes("@") || pastTweets.includes(tweet)) && count < MAX_TWEETS) {
       pastTweets.push(tweet)
       randomTweet = Math.floor(Math.random() * MAX_TWEETS)
@@ -88,6 +99,8 @@ function displayTweet() {
       user = jsonData[randomUser][randomTweet].user.screen_name
       count++;
     }
+
+    // display the Tweet on the page
     let tweetElement = document.createElement('h4')
     tweetElement.setAttribute('id', 'tweet-text')
     tweetElement.textContent = tweet
@@ -95,31 +108,32 @@ function displayTweet() {
   }, 2000);
 }
 
+// initialize counter variables
 let numCorrect = 0
-let numTotal = 0
+let numIncorrect = 0
 let count = 0
 let streak = 0
 
-let numerator, denominator
-let numeratorValue, denominatorValue
-let newNumerator, newDenominator
+// initialize variables for score
+let correct, incorrect
+let correctValue, incorrectValue
+let newCorrect, newIncorrect
 
+// updates the score display with the appropriate values
 function updateScore() {
-  displayTweet()
+  correct = document.getElementById('num-correct')
+  incorrect = document.getElementById('num-incorrect')
 
-  numerator = document.getElementById('num-correct')
-  denominator = document.getElementById('num-total')
+  correctValue = document.createElement('span')
+  correctValue.textContent = 0
+  correct.appendChild(correctValue)
 
-  numeratorValue = document.createElement('span')
-  numeratorValue.textContent = 0
-  numerator.appendChild(numeratorValue)
+  incorrectValue = document.createElement('span')
+  incorrectValue.textContent = 0
+  incorrect.appendChild(incorrectValue)
 
-  denominatorValue = document.createElement('span')
-  denominatorValue.textContent = 0
-  denominator.appendChild(denominatorValue)
-
-  newNumerator = document.createElement('span')
-  newDenominator = document.createElement('span')
+  newCorrect = document.createElement('span')
+  newIncorrect = document.createElement('span')
 }
 
 let streakContainer = document.getElementById('streak')
@@ -137,39 +151,58 @@ pastStreaksContainer.style.visibility = "hidden"
 let pastStreaks = 0
 let record = 0
 
+// location in HTML where the "thumbs up" or "thumbs down" will be displayed
 let thumb = document.getElementById("thumb")
 
+// runs when the player clicks the button for one of the users (makes a guess)
 function onClick(clickedUser) {
-  if (clickedUser.toLowerCase() == "@" + user.toLowerCase()) {
+  if (clickedUser.toLowerCase() == "@" + user.toLowerCase()) { // if choice is correct
+
+    // increment the counts for number of correct choices and the player's streak
     numCorrect++
     streak++
+
+    // if the streak surpasses the previous streak record, update the record
     if (streak > record) {
       record = streak;
     }
+
+    // display the streak if it is greater than 3
     if (streak >= 3) {
       streakContainer.style.visibility = "visible"
+
+      /* once the user passes 3 in their very first streak, their streak record is also
+      displayed next to the streak */
       if (pastStreaks > 0) {
         pastStreaksContainer.style.visibility = "visible"
       }
       pastStreaks++
     }
 
-  thumb.innerHTML = "<i class='fas fa-thumbs-up'></i>"
-  setTimeout(function () {
-    thumb.innerHTML = ""
-  }, 1500);
+    // display thumbs up if the user's choice was correct
+    thumb.innerHTML = "<i class='fas fa-thumbs-up'></i>"
+    setTimeout(function () {
+      thumb.innerHTML = ""
+    }, 1500);
 
-  } else {
-    streak = 0
+  } else { // player's choice was incorrect
+    streak = 0 // reset the streak
+
+    // display a thumbs down
     thumb.innerHTML = "<i class='fas fa-thumbs-down'></i>"
     setTimeout(function () {
       thumb.innerHTML = ""
     }, 1500);
+
+    // increment incorrect guesses
+    numIncorrect++
   }
 
+  // update the values of the streak and streak record
   streakValue.innerHTML = "&#128293;" + streak
   pastStreaksValue.innerHTML = "Best Streak: " + record
 
+  // if the player loses their streak, hide the display
   if (streak == 0) {
     streakContainer.style.visibility = "hidden"
     pastStreaksContainer.style.visibility = "hidden"
@@ -177,36 +210,38 @@ function onClick(clickedUser) {
 
   streakContainer.appendChild(streakValue)
 
+  // ensures that the score is updated correctly each time
   if (count % 2 == 0) {
-    newNumerator.textContent = numCorrect
-    numerator.parentNode.replaceChild(newNumerator, numerator)
+    newCorrect.textContent = numCorrect
+    correct.parentNode.replaceChild(newCorrect, correct)
   } else {
-    numerator.textContent = numCorrect
-    newNumerator.parentNode.replaceChild(numerator, newNumerator)
+    correct.textContent = numCorrect
+    newCorrect.parentNode.replaceChild(correct, newCorrect)
   }
 
+  // push the previous tweet to pastTweets to prevent future repetition
   let oldTweet = document.getElementById('tweet-text').textContent
   pastTweets.push(oldTweet)
   document.getElementById('tweet-text').remove()
 
-  // increment total guesses (denominator)
-  numTotal++
+  // same strategy as used for the correct to ensure score is updated correctly
   if (count % 2 == 0) {
-    newDenominator.textContent = numTotal - numCorrect
-    denominator.parentNode.replaceChild(newDenominator, denominator)
+    newIncorrect.textContent = numIncorrect
+    incorrect.parentNode.replaceChild(newIncorrect, incorrect)
   } else {
-    denominator.textContent = numTotal - numCorrect
-    newDenominator.parentNode.replaceChild(denominator, newDenominator)
+    incorrect.textContent = numIncorrect
+    newIncorrect.parentNode.replaceChild(incorrect, newIncorrect)
   }
 
-  count++
+  count++ // increment count (used for accurate score updating)
 
-  displayTweet()
+  displayTweet() // display the next Tweet
 }
 
 firstUser = document.getElementById('first-user')
 secondUser = document.getElementById('second-user')
 
+// fill text fields with a given user name
 function fillInput(name) {
   if (firstUser.value == "") {
     firstUser.value = name
@@ -217,14 +252,18 @@ function fillInput(name) {
   }
 }
 
+// array of sample users for use with helpMeChoose()
 let sampleUsers = ["elonmusk", "kanyewest", "casey", "markrober", "andrewyang", "joebiden", "realDonaldTrump", "kimkardashian", "ava", "kingjames", "kamalaharris", "aoc", "nygovcuomo", "savannahguthrie", "marwilliamson", "kimmythepooh", "billgates", "BarackObama", "justinbieber", "rihanna", "ladygaga", "taylorswift13", "jtimberlake", "selenagomez", "shakira", "neymarjr"]
 
+/* When the "Help me choose!" link is clicked, two random users from the above array will
+be populated into the text fields */
 function helpMeChoose() {
   let max = sampleUsers.length
   let indexOne = Math.floor(Math.random() * max)
   fillInput(sampleUsers[indexOne])
+
   let indexTwo = Math.floor(Math.random() * max)
-  while (indexOne == indexTwo) {
+  while (indexOne == indexTwo) { // ensure that the same user isn't populated twice
     indexTwo = Math.floor(Math.random() * max)
   }
   fillInput(sampleUsers[indexTwo])
