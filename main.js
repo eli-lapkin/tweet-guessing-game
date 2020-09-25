@@ -9,7 +9,7 @@ function submit() {
 
   let prefix = 'https://cors-anywhere.herokuapp.com/'
   let call = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name='
-  let randomPage = Math.floor(Math.random() * 3)
+  let randomPage = Math.floor(Math.random() * 7)
   urls = [
     prefix + call + firstUser + '&count=' + MAX_TWEETS + "&page=" + toString(randomPage),
     prefix + call + secondUser + '&count=' + MAX_TWEETS + "&page=" + toString(randomPage)
@@ -69,6 +69,7 @@ function displayTweet() {
     user = jsonData[randomUser][randomTweet].user.screen_name
     let count = 0
     while ((tweet.includes("https://t.co/") || tweet.includes("@") || pastTweets.includes(tweet)) && count < MAX_TWEETS) {
+      pastTweets.push(tweet)
       randomTweet = Math.floor(Math.random() * MAX_TWEETS)
       tweet = jsonData[randomUser][randomTweet].text
       user = jsonData[randomUser][randomTweet].user.screen_name
@@ -166,10 +167,10 @@ function onClick(clickedUser) {
   // increment total guesses (denominator)
   numTotal++
   if (count % 2 == 0) {
-    newDenominator.textContent = numTotal
+    newDenominator.textContent = numTotal - numCorrect
     denominator.parentNode.replaceChild(newDenominator, denominator)
   } else {
-    denominator.textContent = numTotal
+    denominator.textContent = numTotal - numCorrect
     newDenominator.parentNode.replaceChild(denominator, newDenominator)
   }
 
@@ -178,10 +179,10 @@ function onClick(clickedUser) {
   displayTweet()
 }
 
-function fillInput(name) {
-  firstUser = document.getElementById('first-user')
-  secondUser = document.getElementById('second-user')
+firstUser = document.getElementById('first-user')
+secondUser = document.getElementById('second-user')
 
+function fillInput(name) {
   if (firstUser.value == "") {
     firstUser.value = name
   } else if (firstUser.value == name) {
@@ -189,4 +190,17 @@ function fillInput(name) {
   } else if (secondUser.value == "") {
     secondUser.value = name
   }
+}
+
+let sampleUsers = ["elonmusk", "kanyewest", "casey", "markrober", "andrewyang", "joebiden", "realDonaldTrump", "mayemusk", "kimkardashian", "ava", "kingjames", "kamalaharris", "aoc", "nygovcuomo", "savannahguthrie", "marwilliamson", "kimmythepooh", "billgates"]
+function helpMeChoose() {
+  if (firstUser != "") {}
+  let max = sampleUsers.length
+  let indexOne = Math.floor(Math.random() * max)
+  fillInput(sampleUsers[indexOne])
+  let indexTwo = Math.floor(Math.random() * max)
+  while (indexOne == indexTwo) {
+    indexTwo = Math.floor(Math.random() * max)
+  }
+  fillInput(sampleUsers[indexTwo])
 }

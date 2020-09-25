@@ -28,7 +28,7 @@
       <i class="fas fa-question-circle"></i>
       Need an example?
       Try <i class="sample" onclick="fillInput('elonmusk')">elonmusk</i> and
-          <i class="sample" onclick="fillInput('kanyewest')">kanyewest</i>.
+          <i class="sample" onclick="fillInput('kanyewest')">kanyewest</i>. Or... <i class="sample" onclick="helpMeChoose()">Help me choose!</i>
     </div>
 
     <div id="tweet"></div>
@@ -40,11 +40,18 @@
       <button type="button" name="secondChoice" id="second-choice" onclick="onClick(document.getElementById('second-choice').textContent)">
       </button>
 
-      <p id="score">Score:
-        <span id="num-correct"></span> / <span id="num-total"></span> Correct
-        <span id="streak"></span>
+      <div id="score">
+        <h4>Score:</h4>
+        <p>
+          Correct: <span id="num-correct"></span>
+          <span id="streak"></span>
+          <br>
+          Incorrect: <span id="num-total"></span>
         <span id="high-score"></span>
-      </p>
+        </p>
+      </div>
+
+      <button type="button" name="restart" onclick="window.location.reload()">Restart</button>
     </div>
 
     <script src="main.js" charset="utf-8"></script>
