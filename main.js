@@ -124,6 +124,8 @@ pastStreaksContainer.style.visibility = "hidden"
 let pastStreaks = 0
 let record = 0
 
+let thumb = document.getElementById("thumb")
+
 function onClick(clickedUser) {
   if (clickedUser.toLowerCase() == "@" + user.toLowerCase()) {
     numCorrect++
@@ -138,8 +140,18 @@ function onClick(clickedUser) {
       }
       pastStreaks++
     }
+
+  thumb.innerHTML = "<i class='fas fa-thumbs-up'></i>"
+  setTimeout(function () {
+    thumb.innerHTML = ""
+  }, 1500);
+
   } else {
     streak = 0
+    thumb.innerHTML = "<i class='fas fa-thumbs-down'></i>"
+    setTimeout(function () {
+      thumb.innerHTML = ""
+    }, 1500);
   }
 
   streakValue.innerHTML = "&#128293;" + streak
@@ -192,9 +204,9 @@ function fillInput(name) {
   }
 }
 
-let sampleUsers = ["elonmusk", "kanyewest", "casey", "markrober", "andrewyang", "joebiden", "realDonaldTrump", "mayemusk", "kimkardashian", "ava", "kingjames", "kamalaharris", "aoc", "nygovcuomo", "savannahguthrie", "marwilliamson", "kimmythepooh", "billgates"]
+let sampleUsers = ["elonmusk", "kanyewest", "casey", "markrober", "andrewyang", "joebiden", "realDonaldTrump", "kimkardashian", "ava", "kingjames", "kamalaharris", "aoc", "nygovcuomo", "savannahguthrie", "marwilliamson", "kimmythepooh", "billgates", "BarackObama", "justinbieber", "rihanna", "ladygaga", "taylorswift13", "jtimberlake", "selenagomez", "shakira", "neymarjr"]
+
 function helpMeChoose() {
-  if (firstUser != "") {}
   let max = sampleUsers.length
   let indexOne = Math.floor(Math.random() * max)
   fillInput(sampleUsers[indexOne])
