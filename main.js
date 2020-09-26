@@ -89,15 +89,14 @@ function displayTweet() {
     let tweet = jsonData[randomUser][randomTweet].text
     user = jsonData[randomUser][randomTweet].user.screen_name
 
-    let count = 0 // used to ensure the following while loop does not run forever
+    tweet = verifyTweet(tweet, randomUser, randomTweet)
 
-    // if Tweet includes a link or @, or has already been displayed, find a new Tweet
-    while ((tweet.includes("https://t.co/") || tweet.includes("@") || pastTweets.includes(tweet)) && count < MAX_TWEETS) {
-      pastTweets.push(tweet)
+    // if this deletion results in an empty string, find a new Tweet
+    while (tweet == "") {
       randomTweet = Math.floor(Math.random() * MAX_TWEETS)
       tweet = jsonData[randomUser][randomTweet].text
       user = jsonData[randomUser][randomTweet].user.screen_name
-      count++;
+      tweet = verifyTweet(tweet, randomUser, randomTweet)
     }
 
     // display the Tweet on the page
@@ -106,6 +105,39 @@ function displayTweet() {
     tweetElement.textContent = tweet
     tweetDiv.appendChild(tweetElement)
   }, 2000);
+}
+
+function verifyTweet(tweet, randomUser, randomTweet) {
+  let count = 0 // used to ensure the following while loop does not run forever
+
+  // if Tweet includes an @, or has already been displayed, find a new Tweet
+  while ((tweet.includes("@") || pastTweets.includes(tweet)) && count < MAX_TWEETS) {
+    pastTweets.push(tweet)
+    randomTweet = Math.floor(Math.random() * MAX_TWEETS)
+    tweet = jsonData[randomUser][randomTweet].text
+    user = jsonData[randomUser][randomTweet].user.screen_name
+
+    count++;
+  }
+
+  /* Save tweet in a new variable and push to pastTweets
+     The original tweet is going to be manipulated below */
+  let originalTweet = tweet
+  pastTweets.push(originalTweet)
+
+  // if Tweet includes a link, delete the link from the Tweet
+  if (tweet.includes("https://t.co/")) {
+    let startOfLink = tweet.indexOf("https://t.co/")
+    let endOfLink = tweet.substring(startOfLink + 12, tweet.length).indexOf(" ")
+    tweet = tweet.substring(startOfLink, endOfLink)
+  }
+
+  // ampersands are retrieved as "&amp;" - replace that with "&"
+  if (tweet.includes("&amp;")) {
+    tweet = tweet.replace("&amp;", "&")
+  }
+
+  return tweet
 }
 
 // initialize counter variables
