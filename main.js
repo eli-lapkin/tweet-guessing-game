@@ -26,6 +26,9 @@ function submit() {
   }, 1000);
 
   makeUserButtons()
+
+  directions = document.getElementById('directions')
+  directions.style.visibility = 'visible'
 }
 
 // function to display two buttons, one for each desired Twitter user

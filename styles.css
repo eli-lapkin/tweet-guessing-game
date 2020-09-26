@@ -32,3 +32,7 @@ body {
 .fa-thumbs-down {
   color: red;
 }
+
+#directions {
+  visibility: hidden;
+}
