@@ -92,7 +92,7 @@ function displayTweet() {
     tweet = verifyTweet(tweet, randomUser, randomTweet)
 
     // if this deletion results in an empty string, find a new Tweet
-    while (tweet == "") {
+    while (tweet == "" || tweet.includes("@")) {
       randomTweet = Math.floor(Math.random() * MAX_TWEETS)
       tweet = jsonData[randomUser][randomTweet].text
       user = jsonData[randomUser][randomTweet].user.screen_name
@@ -111,7 +111,7 @@ function verifyTweet(tweet, randomUser, randomTweet) {
   let count = 0 // used to ensure the following while loop does not run forever
 
   // if Tweet includes an @, or has already been displayed, find a new Tweet
-  while ((tweet.includes("@") || pastTweets.includes(tweet)) && count < MAX_TWEETS) {
+  while (pastTweets.includes(tweet) && count < MAX_TWEETS) {
     pastTweets.push(tweet)
     randomTweet = Math.floor(Math.random() * MAX_TWEETS)
     tweet = jsonData[randomUser][randomTweet].text
