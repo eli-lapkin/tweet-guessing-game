@@ -253,7 +253,7 @@ function fillInput(name) {
 }
 
 // array of sample users for use with helpMeChoose()
-let sampleUsers = ["elonmusk", "kanyewest", "casey", "markrober", "andrewyang", "joebiden", "realDonaldTrump", "kimkardashian", "ava", "kingjames", "kamalaharris", "aoc", "nygovcuomo", "savannahguthrie", "marwilliamson", "kimmythepooh", "billgates", "BarackObama", "justinbieber", "rihanna", "ladygaga", "taylorswift13", "jtimberlake", "selenagomez", "shakira", "neymarjr"]
+let sampleUsers = ["elonmusk", "kanyewest", "casey", "markrober", "andrewyang", "joebiden", "realDonaldTrump", "kimkardashian", "ava", "kingjames", "kamalaharris", "aoc", "nygovcuomo", "savannahguthrie", "marwilliamson", "kimmythepooh", "billgates", "BarackObama", "justinbieber", "rihanna", "taylorswift13", "jtimberlake", "selenagomez", "shakira", "neymarjr"]
 
 /* When the "Help me choose!" link is clicked, two random users from the above array will
 be populated into the text fields */
