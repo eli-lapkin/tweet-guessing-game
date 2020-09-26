@@ -48,6 +48,8 @@ let tweetDiv = document.getElementById('tweet')
 
 function getData() {
   let prefix = 'https://cors-anywhere.herokuapp.com/' // used to avoid CORS error
+
+  // link for API call
   let call = 'https://api.twitter.com/1.1/statuses/user_timeline.json?screen_name='
 
   let randomPage = Math.floor(Math.random() * 7) // select random page (0-MAX_PAGES)
@@ -110,7 +112,7 @@ function displayTweet() {
 function verifyTweet(tweet, randomUser, randomTweet) {
   let count = 0 // used to ensure the following while loop does not run forever
 
-  // if Tweet includes an @, or has already been displayed, find a new Tweet
+  // if Tweet has already been displayed, find a new Tweet
   while (pastTweets.includes(tweet) && count < MAX_TWEETS) {
     pastTweets.push(tweet)
     randomTweet = Math.floor(Math.random() * MAX_TWEETS)
@@ -120,7 +122,7 @@ function verifyTweet(tweet, randomUser, randomTweet) {
     count++;
   }
 
-  /* Save tweet in a new variable and push to pastTweets
+  /* Save tweet in a new variable and push to pastTweets.
      The original tweet is going to be manipulated below */
   let originalTweet = tweet
   pastTweets.push(originalTweet)
@@ -168,6 +170,7 @@ function updateScore() {
   newIncorrect = document.createElement('span')
 }
 
+// used to display the streak and streak record
 let streakContainer = document.getElementById('streak')
 let streakValue = document.createElement('span')
 
