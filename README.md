@@ -1,9 +1,13 @@
-# Change++ 2020 Coding Challenge
+# Tweet Guessing Game
 ## Eli Lapkin
 
 ### Description
 
 This project is a Tweet guessing game. Each round, it randomly displays a Tweet from one of two chosen Twitter accounts. The player must guess who the author of the Tweet is.
+
+### How to Run
+
+Download the source files or clone the repository into a local directory. Simply open the `index.html` file in a web browser, or setup a local web server.
 
 ### Features
 
